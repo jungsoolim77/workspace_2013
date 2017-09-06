@@ -1,0 +1,21 @@
+package review202;
+
+public class Review202 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		try{
+			myExceptionTest();
+		}catch(Exception ex){
+			ex.printStackTrace(System.out);
+		}
+
+	}
+	
+	public static void myExceptionTest() throws Exception{
+		throw new MyTestException("This is a testing");
+		
+	}
+
+}

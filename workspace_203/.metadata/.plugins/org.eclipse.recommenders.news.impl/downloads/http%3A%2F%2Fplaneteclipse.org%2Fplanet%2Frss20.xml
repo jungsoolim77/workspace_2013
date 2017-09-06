@@ -1,0 +1,611 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+
+<channel>
+	<title>Planet Eclipse</title>
+	<link>http://planeteclipse.org/planet/</link>
+	<language>en</language>
+	<description>Planet Eclipse - http://planeteclipse.org/planet/</description>
+
+<item>
+	<title>Donald Raab: As a matter of Factory — Part 2 (Immutable)</title>
+	<guid isPermaLink="false">https://medium.com/p/8cb72ff897ee</guid>
+	<link>https://medium.com/@donraab/as-a-matter-of-factory-part-2-immutable-8cb72ff897ee?source=rss-df39b86e9f04------2</link>
+	<description>&lt;p&gt;In &lt;a href=&quot;https://medium.com/@donraab/as-a-matter-of-factory-part-1-mutable-75cc2c5d72d9&quot;&gt;part 1&lt;/a&gt; of this blog series on Collection Factories, I illustrated how the factory classes in &lt;a href=&quot;https://www.eclipse.org/collections/&quot;&gt;Eclipse Collections&lt;/a&gt; can be used to create instances of mutable collections. In part 2, I will show how the same factory classes can be used to create immutable collections.&lt;/p&gt;&lt;p&gt;If you want to create immutable collections in Eclipse Collections, you would use &amp;lt;FactoryClass&amp;gt;.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(x, y, z).&lt;/p&gt;&lt;pre&gt;ImmutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;ImmutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;ImmutableBag&amp;lt;String&amp;gt; bag = &lt;br /&gt;    Bags.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;ImmutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;If you’d like a more concise option for creating immutable containers, you can use the &lt;a href=&quot;https://www.eclipse.org/collections/javadoc/8.2.0/org/eclipse/collections/impl/factory/Iterables.html&quot;&gt;&lt;strong&gt;Iterables&lt;/strong&gt;&lt;/a&gt; class in Eclipse Collections with static imports.&lt;/p&gt;&lt;pre&gt;ImmutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;iList&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;ImmutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;iSet&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;ImmutableBag&amp;lt;String&amp;gt; bag = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;iBag&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;ImmutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;iMap&lt;/em&gt;&lt;/strong&gt;(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;The &lt;strong&gt;“i”&lt;/strong&gt; methods are short for “&lt;strong&gt;immutable&lt;/strong&gt;”, and the &lt;strong&gt;“m”&lt;/strong&gt; methods are short for “&lt;strong&gt;mutable&lt;/strong&gt;”. As mentioned in &lt;a href=&quot;https://medium.com/@donraab/as-a-matter-of-factory-part-1-mutable-75cc2c5d72d9&quot;&gt;part 1&lt;/a&gt;, there is currently no equivalent of the Iterables class for the primitive factories.&lt;/p&gt;&lt;p&gt;If you want empty immutable collections, use the empty method on the immutable factory.&lt;/p&gt;&lt;pre&gt;ImmutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;ImmutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;ImmutableBag&amp;lt;String&amp;gt; bag = &lt;br /&gt;    Bags.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;ImmutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;p&gt;An empty immutable collection is a singleton.&lt;/p&gt;&lt;h4&gt;ImmutableCollection does not extend Collection&lt;/h4&gt;&lt;p&gt;There is important distinction between the &lt;strong&gt;MutableCollection&lt;/strong&gt; and &lt;strong&gt;ImmutableCollection&lt;/strong&gt; hierarchies in Eclipse Collections. The interfaces that extend &lt;strong&gt;ImmutableCollection&lt;/strong&gt; do not extend &lt;strong&gt;java.util &lt;/strong&gt;equivalents as their mutable counterparts do. This design decision was explained in detail in this &lt;a href=&quot;https://stackoverflow.com/questions/29504881/immutablelist-does-not-extend-list&quot;&gt;StackOverflow post&lt;/a&gt;. While an &lt;strong&gt;ImmutableList&lt;/strong&gt; does not extend &lt;strong&gt;java.util.List&lt;/strong&gt;, every implementation of &lt;strong&gt;ImmutableList&lt;/strong&gt; must extend &lt;strong&gt;java.util.List&lt;/strong&gt; as depicted in the following diagram. The &lt;strong&gt;ImmutableCollection&lt;/strong&gt; implementations will not have any mutating methods like add, remove, addAll, removeAll or clear, and the Iterator returned for any of these types will not support remove. The implementations must extend &lt;strong&gt;java.util.List&lt;/strong&gt; however to support the equals and hashcode contracts of a List.&lt;/p&gt;&lt;figure&gt;&lt;img alt=&quot;&quot; src=&quot;https://cdn-images-1.medium.com/max/946/1*kteEV7063kfS91tJrLBvzA.png&quot; /&gt;ImmutableList does not extend java.util.List&lt;/figure&gt;&lt;p&gt;You cannot create the &lt;strong&gt;ImmutableList&lt;/strong&gt; implementations directly, but instead must use the appropriate factory class. The factory classes do not return the implementation class type, but instead return the interface type, such as &lt;strong&gt;ImmutableList&lt;/strong&gt; or &lt;strong&gt;ImmutableSet&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;The factory classes may return an optimized container for smaller collection sizes. For instance, for &lt;strong&gt;ImmutableList&lt;/strong&gt;, there are optimized implementations for empty, singleton, doubleton, tripleton and all the way to decapleton. None of these implementations require a backing array, but instead as the diagram depicts, keep direct references to their elements. For sets and maps, the optimization goes to quadrupleton (4). For Bags, there is a special optimization called &lt;strong&gt;ImmutableArrayBag&lt;/strong&gt;, which will go as high as 20 elements, and then will use an &lt;strong&gt;ImmutableHashBag&lt;/strong&gt; for larger collections. The following should give an indication of the potential memory savings obtained by using small immutable collections.&lt;/p&gt;&lt;pre&gt;Memory Cost in Bytes&lt;br /&gt; &lt;br /&gt;Type - Size: Mutable — Immutable&lt;br /&gt;— — — — — — — — — — - - - - - - -&lt;br /&gt;List — 0: 40 – 16&lt;br /&gt;List — 1: 48 – 16&lt;br /&gt;List — 2: 48 – 24&lt;br /&gt;List — 3: 56 – 24&lt;br /&gt;List — 4: 56 – 32&lt;br /&gt;List — 5: 64 – 32&lt;br /&gt;List — 6: 64 – 40&lt;br /&gt;List — 7: 72 – 40&lt;br /&gt;List — 8: 72 – 48&lt;br /&gt;List — 9: 80 – 48&lt;br /&gt;List -10: 80 – 56&lt;br /&gt;List -11: 88 – 80&lt;br /&gt;— — — — — — — — — — &lt;br /&gt;Bag — 0 : 216 – 16&lt;br /&gt;Bag — 1 : 232 – 32&lt;br /&gt;Bag — 2 : 248 – 104&lt;br /&gt;Bag — 3 : 264 – 136&lt;br /&gt;Bag — 4 : 280 – 152&lt;br /&gt;Bag — 5 : 296 – 184&lt;br /&gt;— — — — — — — — — — &lt;br /&gt;Set — 0 : 112 – 16&lt;br /&gt;Set — 1 : 72  – 32&lt;br /&gt;Set — 2 : 96  – 56&lt;br /&gt;Set — 3 : 112 – 72&lt;br /&gt;Set — 4 : 208 – 96&lt;br /&gt;Set — 5 : 224 – 176&lt;/pre&gt;&lt;p&gt;I used ObjectSizeCalculator.&lt;em&gt;getObjectSize()&lt;/em&gt; to calculate the memory cost for each object. For List, I used &lt;em&gt;null&lt;/em&gt; for the elements, to reduce the memory cost down to the data structure only. For Bag and Set I used &lt;em&gt;new Object()&lt;/em&gt; for elements to have the smallest possible object footprint. The potential memory savings would be greater as well, if your mutable collections are not trimmed to size. I have worked in an application previously where I had millions of small sets, lists and maps. The memory savings that was achieved using these small immutable collections was substantial.&lt;/p&gt;&lt;h4&gt;Interop with the JDK collection types&lt;/h4&gt;&lt;p&gt;You can technically cast an &lt;strong&gt;ImmutableList&lt;/strong&gt; to a &lt;strong&gt;java.util.List&lt;/strong&gt;, but this would be an ugly and unsafe way of providing interop with existing libraries. Instead, there are methods available on each immutable interface that can cast the type to the appropriate JDK type for you. The following shows how you can use these methods.&lt;/p&gt;&lt;pre&gt;List&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;castToList&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;Set&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;castToSet&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;Map&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;).&lt;strong&gt;castToMap&lt;/strong&gt;();&lt;/pre&gt;&lt;p&gt;It has always been a core design principle in Eclipse Collections to provide good interop with the existing JDK collection types.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Note: &lt;/strong&gt;There is no &lt;strong&gt;castToBag&lt;/strong&gt; method on &lt;strong&gt;ImmutableBag&lt;/strong&gt;, because there is no &lt;strong&gt;Bag&lt;/strong&gt; type in the JDK today.&lt;/p&gt;&lt;h4&gt;&lt;strong&gt;Mutable Builders for Immutable Collections&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;There is another very useful factory approach for creating immutable collections. In Eclipse Collections, every mutable type has a method which can copy itself to its immutable equivalent type. The method name is &lt;strong&gt;toImmutable&lt;/strong&gt;.&lt;/p&gt;&lt;pre&gt;ImmutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;toImmutable&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;ImmutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;toImmutable&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;ImmutableBag&amp;lt;String&amp;gt; bag = &lt;br /&gt;    Bags.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;toImmutable&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;ImmutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;).&lt;strong&gt;toImmutable&lt;/strong&gt;();&lt;/pre&gt;&lt;p&gt;This means that every mutable collection is a natural &lt;strong&gt;&lt;em&gt;builder&lt;/em&gt;&lt;/strong&gt; for its corresponding immutable type. We do not provide immutable builders to convert to any different types however. So if you wanted an &lt;strong&gt;ImmutableSet&lt;/strong&gt; built from a &lt;strong&gt;MutableList&lt;/strong&gt;, you would have to use one of the two approaches.&lt;/p&gt;&lt;pre&gt;ImmutableSet&amp;lt;String&amp;gt; set1 = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;).&lt;strong&gt;toSet&lt;/strong&gt;().&lt;strong&gt;toImmutable&lt;/strong&gt;();&lt;br /&gt;&lt;br /&gt;ImmutableSet&amp;lt;String&amp;gt; set2 = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.withAll(Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;));&lt;/pre&gt;&lt;h4&gt;&lt;strong&gt;Object and Primitive Immutable Collections&lt;/strong&gt;&lt;/h4&gt;&lt;p&gt;Here are examples of all the object collection types you can create using the immutable factories.&lt;/p&gt;&lt;pre&gt;ImmutableList&amp;lt;T&amp;gt; list = Lists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableSet&amp;lt;T&amp;gt; set = Sets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableSortedSet&amp;lt;T&amp;gt; sortedSet = SortedSets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableMap&amp;lt;K, V&amp;gt; map = Maps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableSortedMap&amp;lt;K, V&amp;gt; sortedMap = SortedMaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableStack&amp;lt;T&amp;gt; stack = Stacks.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableBag&amp;lt;T&amp;gt; bag = Bags.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableSortedBag&amp;lt;T&amp;gt; sortedBag = SortedBags.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableBiMap&amp;lt;K, V&amp;gt; biMap = BiMaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableListMultimap&amp;lt;K, V&amp;gt; mm = Multimaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.list.empty();&lt;br /&gt;ImmutableSetMultimap&amp;lt;K, V&amp;gt; mm = Multimaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.set.empty();&lt;br /&gt;ImmutableBagMultimap&amp;lt;K, V&amp;gt; mm = Multimaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.bag.empty();&lt;/pre&gt;&lt;p&gt;Eclipse Collections supports immutable containers for all eight of the Java primitive types as well. This provides good &lt;a href=&quot;https://medium.com/@donraab/symmetric-sympathy-2c59d4541d60&quot;&gt;symmetry&lt;/a&gt; between the object and primitive containers. Here all all of the primitive types that can created using the immutable factories.&lt;/p&gt;&lt;pre&gt;ImmutableIntList list = IntLists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableIntSet set = IntSets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;// supports all combinations of primitives&lt;br /&gt;ImmutableIntIntMap map = IntIntMaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();  &lt;br /&gt;ImmutableIntObjectMap map = IntObjectMaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableObjectIntMap map = ObjectIntMaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;ImmutableIntStack stack = IntStacks.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableIntBag bag = IntBags.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;h4&gt;Growing and Shrinking Immutable Collections&lt;/h4&gt;&lt;p&gt;Once you have an immutable collection created, you may want to grow or shrink it by adding or removing elements. As I mentioned before, there are no mutating methods like add, addAll, remove or removeAll on immutable collection interfaces in Eclipse Collections. This provides what I refer to as &lt;strong&gt;&lt;em&gt;contractual immutability&lt;/em&gt;&lt;/strong&gt; in addition to providing &lt;strong&gt;&lt;em&gt;structural immutability&lt;/em&gt;&lt;/strong&gt;. There are methods available that allow for safely copying and growing or shrinking immutable collections. There are methods named newWith, newWithAll, newWithout and newWithoutAll for extensions of &lt;strong&gt;ImmutableCollection&lt;/strong&gt;. For &lt;strong&gt;ImmutableMap&lt;/strong&gt; implementations, the methods are named newWithKeyValue, newWithAllKeyValues, newWithoutKey and newWithoutAllKeys.&lt;/p&gt;&lt;pre&gt;ImmutableList&amp;lt;String&amp;gt; list0 = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableList&amp;lt;String&amp;gt; list1 = &lt;br /&gt;    list0.&lt;strong&gt;newWith&lt;/strong&gt;(&quot;1&quot;);&lt;br /&gt;ImmutableList&amp;lt;String&amp;gt; list2 = &lt;br /&gt;    list1.&lt;strong&gt;newWithAll&lt;/strong&gt;(Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;2&quot;));&lt;/pre&gt;&lt;pre&gt;ImmutableSet&amp;lt;String&amp;gt; set0 = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableSet&amp;lt;String&amp;gt; set1 = &lt;br /&gt;    set0.&lt;strong&gt;newWith&lt;/strong&gt;(&quot;1&quot;);&lt;br /&gt;ImmutableSet&amp;lt;String&amp;gt; set2 = &lt;br /&gt;    set1.&lt;strong&gt;newWithAll&lt;/strong&gt;(Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;2&quot;));&lt;/pre&gt;&lt;pre&gt;ImmutableMap&amp;lt;String, String&amp;gt; map0 = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableMap&amp;lt;String, String&amp;gt; map1 = &lt;br /&gt;    map0.&lt;strong&gt;newWithKeyValue&lt;/strong&gt;(&quot;1&quot;, &quot;1&quot;);&lt;br /&gt;ImmutableMap&amp;lt;String, String&amp;gt; map2 = &lt;br /&gt;    map1.&lt;strong&gt;newWithAllKeyValues&lt;/strong&gt;(&lt;br /&gt;        Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(Tuples.&lt;em&gt;pair&lt;/em&gt;(&quot;2&quot;, &quot;2&quot;)))&lt;/pre&gt;&lt;p&gt;In the interest of providing good symmetry, these methods are available on the primitive containers as well.&lt;/p&gt;&lt;pre&gt;ImmutableIntList list0 =&lt;br /&gt;        IntLists.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableIntList list1 =&lt;br /&gt;        list0.&lt;strong&gt;newWith&lt;/strong&gt;(1);&lt;br /&gt;ImmutableIntList list2 =&lt;br /&gt;        list1.&lt;strong&gt;newWithAll&lt;/strong&gt;(IntLists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(2));&lt;/pre&gt;&lt;pre&gt;ImmutableIntSet set0 =&lt;br /&gt;        IntSets.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableIntSet set1 =&lt;br /&gt;        set0.&lt;strong&gt;newWith&lt;/strong&gt;(1);&lt;br /&gt;ImmutableIntSet set2 =&lt;br /&gt;        set1.&lt;strong&gt;newWithAll&lt;/strong&gt;(IntSets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(2));&lt;/pre&gt;&lt;pre&gt;ImmutableIntIntMap map0 =&lt;br /&gt;        IntIntMaps.&lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;ImmutableIntIntMap map1 =&lt;br /&gt;        map0.&lt;strong&gt;newWithKeyValue&lt;/strong&gt;(1, 1);&lt;/pre&gt;&lt;p&gt;I discovered while writing this blog, that we were missing some symmetry in our immutable primitive map containers. We do not currently have &lt;strong&gt;newWithAllKeyValues&lt;/strong&gt; on immutable primitive maps, so I submitted an &lt;a href=&quot;https://github.com/eclipse/eclipse-collections/issues/344&quot;&gt;issue request&lt;/a&gt; for the feature.&lt;/p&gt;&lt;h4&gt;Summary&lt;/h4&gt;&lt;p&gt;All you need to remember to create either mutable or immutable container types in Eclipse Collections is to remember the pattern of plural factory class names to types (&lt;strong&gt;List&lt;/strong&gt; has &lt;strong&gt;Lists&lt;/strong&gt;, &lt;strong&gt;Set&lt;/strong&gt; has &lt;strong&gt;Sets&lt;/strong&gt;, etc.). Then use the code completion of your IDE to decide whether you want &lt;strong&gt;&lt;em&gt;immutable&lt;/em&gt;&lt;/strong&gt; or &lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt; instances. Then you can choose either &lt;strong&gt;&lt;em&gt;with&lt;/em&gt;&lt;/strong&gt; or &lt;strong&gt;&lt;em&gt;of&lt;/em&gt;&lt;/strong&gt; depending on your method naming preference.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/eclipse/eclipse-collections&quot;&gt;Eclipse Collections&lt;/a&gt; works with Java versions 5 though 9. So these factories can still be used today if you are working on any projects that have not yet upgraded to Java 8. If you are using a Java version before Java 8, simply use &lt;a href=&quot;http://mvnrepository.com/artifact/org.eclipse.collections/eclipse-collections/7.1.1&quot;&gt;Eclipse Collections 7.1.1&lt;/a&gt;. If you are using Java 8 or above, you can use &lt;a href=&quot;http://mvnrepository.com/artifact/org.eclipse.collections/eclipse-collections/8.2.0&quot;&gt;Eclipse Collections 8.x&lt;/a&gt; or the soon to be released 9.x version. There are &lt;a href=&quot;http://mvnrepository.com/artifact/org.eclipse.collections/eclipse-collections/9.0.0.M3&quot;&gt;milestone releases of 9.x&lt;/a&gt; available today if you would like to experiment and provide us with feedback.&lt;/p&gt;&lt;p&gt;For a complete reference of all factory types and how to create collection containers, you can read this section of the &lt;a href=&quot;https://github.com/eclipse/eclipse-collections/blob/master/docs/guide.md#-creating-collections-containers&quot;&gt;Eclipse Collections reference guide&lt;/a&gt;.&lt;/p&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=8cb72ff897ee&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Mon, 04 Sep 2017 19:07:12 +0000</pubDate>
+</item>
+<item>
+	<title>PapyrusUML: My minions at MODELS 2017 conference</title>
+	<guid isPermaLink="false">http://papyrusuml.wordpress.com/?p=814</guid>
+	<link>https://papyrusuml.wordpress.com/2017/09/01/my-minions-at-models-2017-conference/</link>
+	<description>&lt;p&gt;As some of you may know, MODELS is &lt;strong&gt;The&lt;/strong&gt; Conference on Model Driven Engineering Languages and Systems. This is where all the smart people go to talk about models&lt;/p&gt;
+&lt;p&gt;Did you know that “models” is my middle name? Well, not really, but it is what I’m all about.&lt;/p&gt;
+&lt;p&gt;Given my love for models, my &lt;a href=&quot;https://www.polarsys.org/papyrus-ic&quot; rel=&quot;noopener&quot; target=&quot;_blank&quot;&gt;industry consortium&lt;/a&gt; has decided to be a &lt;strong&gt;GOLD&lt;/strong&gt; sponsor of the conference! Isn’t that a nice gift (both for me and &lt;span style=&quot;text-decoration: underline;&quot;&gt;you&lt;/span&gt;)!&lt;/p&gt;
+&lt;p&gt;This year, MODELS is held in Austin, Texas from Sept 20 to 22. with satellite events on Sept. 17-18. If you are going, say hi to my minions!&lt;/p&gt;
+&lt;p&gt;And of course, many of my minions will be there, attending and presenting at workshops and tutorials! If you are going, go say hi to my minions:&lt;/p&gt;
+&lt;p style=&quot;padding-left: 60px;&quot;&gt;Dimitris, Ernesto, Federico, Francis, Jordi, Juergen, Philip, Sebastien, and Tanja&lt;/p&gt;
+&lt;p&gt;You can find them by looking at &lt;a href=&quot;https://wiki.polarsys.org/MODELS_2017_Conference&quot;&gt;this list&lt;/a&gt; of all the things they will be presenting at the conference!&lt;/p&gt;
+&lt;p&gt;You should also ask them about the special event! (wink, wink, nudge, nudge)&lt;/p&gt;
+&lt;p&gt;My minions and I hope to see you in Austin!&lt;/p&gt;
+&lt;p&gt;Now go and download the latest versions of me:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.eclipse.org/papyrus/&quot;&gt;Papyrus&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.eclipse.org/papyrus-rt/&quot; rel=&quot;noopener&quot; target=&quot;_blank&quot;&gt;Papyrus for Real Time&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wiki.eclipse.org/Papyrus_for_Information_Modeling&quot;&gt;Papyrus for Information Modeling&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://marketplace.eclipse.org/content/archimate-papyrus&quot;&gt;Archimate for Papyrus&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt; &lt;/p&gt;
+&lt;p&gt; &lt;/p&gt;&lt;br /&gt;Filed under: &lt;a href=&quot;https://papyrusuml.wordpress.com/category/uncategorized/&quot;&gt;Uncategorized&lt;/a&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/godelicious/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/delicious/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gofacebook/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/facebook/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gotwitter/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/twitter/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/gostumble/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/stumble/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/godigg/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/digg/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://feeds.wordpress.com/1.0/goreddit/papyrusuml.wordpress.com/814/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/reddit/papyrusuml.wordpress.com/814/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=papyrusuml.wordpress.com&amp;amp;blog=72365150&amp;amp;post=814&amp;amp;subd=papyrusuml&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 01 Sep 2017 06:00:17 +0000</pubDate>
+</item>
+<item>
+	<title>EclipseCon Europe 2017: Mutate and Test Your Tests</title>
+	<guid isPermaLink="false">https://www.eclipsecon.org/europe2017/3064 at https://www.eclipsecon.org/europe2017</guid>
+	<link>https://www.eclipsecon.org/europe2017/news/mutate-and-test-your-tests</link>
+	<description>&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;h4&gt;
+	by Benoit Baudry&lt;/h4&gt;
+&lt;p&gt;I am extremely proud and happy that my &lt;a href=&quot;https://www.eclipsecon.org/europe2017/session/mutate-and-test-your-tests&quot;&gt;talk on mutation testing&lt;/a&gt; was accepted as an early bird for EclipseCon Europe 2017. ...In this talk, I will focus on qualitative evaluation of a unit test suite. Statement coverage is commonly used to quantify the quality of a test suite: it measures the ratio of source code statements that are executed at least once when running the test suite. However, statement coverage is known to be a rather weak quality indicator.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-field-news-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;https://www.eclipsecon.org/europe2017/news/mutate-and-test-your-tests&quot;&gt;&lt;img alt=&quot;&quot; class=&quot;img-responsive block-center&quot; height=&quot;250&quot; src=&quot;https://www.eclipsecon.org/europe2017/sites/default/files/styles/solstice_news_-_default_-_thumbnail/public/news/benoit-baudry-2014.png?itok=hjwYfLl9&quot; width=&quot;250&quot; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</description>
+	<pubDate>Wed, 30 Aug 2017 04:49:56 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Eclipse Public License Version 2.0 Approved By OSI and Eclipse Foundation Board of Directors</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/i3H38kQ2jDI/20170829eplv2.php</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/i3H38kQ2jDI/20170829eplv2.php</link>
+	<description>The Eclipse Foundation is pleased to announce a new version 2 of the Eclipse Public License (EPL v2) has been approved by the Eclipse Foundation Board of Directors and the Open Source Initiative (OSI).&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/i3H38kQ2jDI&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Tue, 29 Aug 2017 19:20:00 +0000</pubDate>
+</item>
+<item>
+	<title>Chris Aniszczyk: Shipping OCI v1.0.0</title>
+	<guid isPermaLink="false">http://aniszczyk.org/?p=4122</guid>
+	<link>http://aniszczyk.org/2017/08/29/shipping-oci-v1-0-0/</link>
+	<description>&lt;p&gt;Last month after nearly 2 years, the &lt;a href=&quot;https://opencontainers.org&quot;&gt;Open Container Initiative&lt;/a&gt; (OCI) community shipped v1.0.0 (see &lt;a href=&quot;https://www.opencontainers.org/release-notices/v1-0-0&quot;&gt;release notes&lt;/a&gt;) of two container standard specifications:&lt;/p&gt;
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;
+&lt;p dir=&quot;ltr&quot; lang=&quot;en&quot;&gt;[NEWS] &lt;a href=&quot;https://twitter.com/OCI_ORG&quot;&gt;@OCI_ORG&lt;/a&gt; Releases v1.0 of Container Standards: &lt;a href=&quot;https://t.co/PzZQX9gptT&quot;&gt;https://t.co/PzZQX9gptT&lt;/a&gt; &lt;a href=&quot;https://t.co/C8aIi2kZuc&quot;&gt;pic.twitter.com/C8aIi2kZuc&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;— The Linux Foundation (@linuxfoundation) &lt;a href=&quot;https://twitter.com/linuxfoundation/status/887690303838318592&quot;&gt;July 19, 2017&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Outside of relevant container standards finalized, another thing that was enabled by this v1.0.0 release was an interesting IP Policy (&lt;a href=&quot;http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0---patent-only&quot;&gt;OWFa v1.0&lt;/a&gt;) embedded in the OCI charter. Essentially, there is patent non-assertion and royalty free patent grant made by all OCI members against the entire 1.0.0 specification implementations, not just their contributions!&lt;/p&gt;
+&lt;p&gt;https://twitter.com/cra/status/899668238824591361&lt;/p&gt;
+&lt;p&gt;This is simply good news for the industry when it comes to what I call establishing an “IP no fly zone” for core container technology, which should spur further container adoption. Also, standardization also helps implementors and tool builders feel safe that things won’t break, which has been a bit of a challenge given how fast container technology has been moving.&lt;/p&gt;
+&lt;p&gt;Finally, one more thing to highlight is that OCI is also helping sponsor a diversity scholarship at DockerCon EU in Copenhagen:&lt;/p&gt;
+&lt;blockquote class=&quot;twitter-tweet&quot;&gt;
+&lt;p dir=&quot;ltr&quot; lang=&quot;en&quot;&gt;&lt;a href=&quot;https://twitter.com/hashtag/DockerCon?src=hash&quot;&gt;#DockerCon&lt;/a&gt; EU Diversity Scholarship via &lt;a href=&quot;https://twitter.com/OCI_ORG&quot;&gt;@OCI_ORG&lt;/a&gt; is now open! Learn more and apply here: &lt;a href=&quot;https://t.co/0LnBEbCmeS&quot;&gt;https://t.co/0LnBEbCmeS&lt;/a&gt; &lt;a href=&quot;https://t.co/PZM4Kwi6LI&quot;&gt;pic.twitter.com/PZM4Kwi6LI&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;— The Linux Foundation (@linuxfoundation) &lt;a href=&quot;https://twitter.com/linuxfoundation/status/897385885209120768&quot;&gt;August 15, 2017&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;Please encourage qualified folks to apply, the deadline is September 5th.&lt;/p&gt;</description>
+	<pubDate>Tue, 29 Aug 2017 13:18:28 +0000</pubDate>
+</item>
+<item>
+	<title>EclipseCon Europe 2017: Sponsor Testimonial: Jan Köhnlein, TypeFox</title>
+	<guid isPermaLink="false">https://www.eclipsecon.org/europe2017/3070 at https://www.eclipsecon.org/europe2017</guid>
+	<link>https://www.eclipsecon.org/europe2017/news/sponsor-testimonial-jan-k%C3%B6hnlein-typefox</link>
+	<description>&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;EclipseCon Europe connects the Eclipse community in the best possible way. You will hear great talks on a wide range of topics, talk to smart and friendly people, enjoy great food and just have a very good time.  ...This year’s EclipseCon gives us a great opportunity to share our knowledge how to &lt;a href=&quot;https://www.eclipsecon.org/europe2017/session/integrating-xtext-and-sirius-strategies-and-pitfalls&quot;&gt;integrate Xtext with Sirius&lt;/a&gt;. We will also present three new frameworks: &lt;a href=&quot;https://www.eclipsecon.org/europe2017/session/eclipse-xpect-easy-specification-review-and-testing-xtext-languages&quot;&gt;Xpect&lt;/a&gt;, which makes testing Xtext languages easy, &lt;a href=&quot;https://www.eclipsecon.org/europe2017/session/running-theia-eclipse-che&quot;&gt;Theia&lt;/a&gt;, that allows you to build tools that run both in a browser or as a rich-client, and &lt;a href=&quot;https://www.eclipsecon.org/europe2017/session/sprotty-graphical-views-web-applications&quot;&gt;sprotty&lt;/a&gt;, a graphical framework for web-based apps which extends the ideas of the LSP to graphics....&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-field-news-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;https://www.eclipsecon.org/europe2017/news/sponsor-testimonial-jan-k%C3%B6hnlein-typefox&quot;&gt;&lt;img alt=&quot;&quot; class=&quot;img-responsive block-center&quot; height=&quot;250&quot; src=&quot;https://www.eclipsecon.org/europe2017/sites/default/files/styles/solstice_news_-_default_-_thumbnail/public/news/Jan%20Koehnlein.jpg?itok=3JfC-_eH&quot; width=&quot;250&quot; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</description>
+	<pubDate>Tue, 29 Aug 2017 09:45:29 +0000</pubDate>
+</item>
+<item>
+	<title>Tom Schindl: Proper OSGi access restriction warnings for e(fx)clipse maven projects</title>
+	<guid isPermaLink="false">http://tomsondev.bestsolution.at/?p=5095</guid>
+	<link>https://tomsondev.bestsolution.at/2017/08/28/proper-osgi-access-restriction-warnings-for-efxclipse-maven-projects/</link>
+	<description>&lt;p&gt;In the last few days I worked on the last required feature to abandon PDE and use maven (with the bnd-maven-plugin) and m2e.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://tomsondev.bestsolution.at/2017/08/28/proper-osgi-access-restriction-warnings-for-efxclipse-maven-projects/screen-access/&quot; rel=&quot;attachment wp-att-5096&quot;&gt;&lt;img alt=&quot;&quot; class=&quot;alignnone size-full wp-image-5096&quot; height=&quot;398&quot; src=&quot;https://tomsondev.files.wordpress.com/2017/08/screen-access.png?w=640&amp;amp;h=398&quot; width=&quot;640&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Does anyone reading my blog know if IntelliJ and Netbeans also have a feature like this?&lt;/p&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/tomsondev.wordpress.com/5095/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/tomsondev.wordpress.com/5095/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=tomsondev.bestsolution.at&amp;amp;blog=7995503&amp;amp;post=5095&amp;amp;subd=tomsondev&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Mon, 28 Aug 2017 18:29:51 +0000</pubDate>
+</item>
+<item>
+	<title>Geniutec: Working with Java 9 in Eclipse</title>
+	<guid isPermaLink="false">https://www.genuitec.com/?p=534701</guid>
+	<link>https://www.genuitec.com/working-java-9-eclipse/</link>
+	<description>&lt;p&gt;The Java 9 general availability release is just under a month away, but the builds available right now are already feature complete. If you can’t wait to try some Java 9 capabilities, you can start developing with Java 9 in Eclipse, right now!Installing the Java 9 SupportYou need an Oxygen based install of Eclipse – ensure […]&lt;/p&gt;
+&lt;p&gt;The post &lt;a href=&quot;https://www.genuitec.com/working-java-9-eclipse/&quot; rel=&quot;nofollow&quot;&gt;Working with Java 9 in Eclipse&lt;/a&gt; appeared first on &lt;a href=&quot;https://www.genuitec.com&quot; rel=&quot;nofollow&quot;&gt;Genuitec&lt;/a&gt;.&lt;/p&gt;</description>
+	<pubDate>Thu, 24 Aug 2017 14:19:50 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Eclipse Newsletter - Exciting New Eclipse Projects</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/581aR0tQGTM/</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/581aR0tQGTM/</link>
+	<description>The latest newsletter is all about new and exciting projects!&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/581aR0tQGTM&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Tue, 22 Aug 2017 14:00:00 +0000</pubDate>
+</item>
+<item>
+	<title>Tom Schindl: Cross IDE Dev-Support for “e4 on JavaFX” – We are almost there</title>
+	<guid isPermaLink="false">http://tomsondev.bestsolution.at/?p=5090</guid>
+	<link>https://tomsondev.bestsolution.at/2017/08/21/cross-ide-dev-support-for-e4-on-javafx-we-are-almost-there/</link>
+	<description>&lt;p&gt;In the last few days I made a major step towards supporting all major Java-IDEs (Eclipse, Netbeans, IntelliJ IDEA) to develop “e4 on JavaFX” applications.&lt;/p&gt;
+&lt;p&gt;The key to this multi-IDE support is that we don’t use the MANIFEST-First approach from PDE but we use:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Maven 3.5&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/bndtools/bnd/tree/master/maven/bnd-maven-plugin&quot;&gt;bnd-maven-plugin&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;A custom maven-plugin for launching in Netbeans and IntelliJ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Eclipse&lt;/h2&gt;
+&lt;p&gt;For every member on your team who likes the Eclipse IDE.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;In Eclipse we use a custom launcher who uses the maven-project dependency information to launch OSGi and install all necessary bundles.&lt;/p&gt;
+&lt;h2&gt;Netbeans&lt;/h2&gt;
+&lt;p&gt;For every member on your team who likes Netbeans&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;As you notice hot-code replacement is not yet working (or maybe I’m using Netbeans wrong?) Is there anything i need to do after having changed the file to hot-swap it?&lt;/p&gt;
+&lt;h2&gt;IntelliJ IDEA&lt;/h2&gt;
+&lt;p&gt;For every member on your team who likes IntelliJ&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;As you notice hot-code replacement is not yet working (or maybe I’m using IntelliJ IDEA wrong?) Is there anything i need to do after having changed the file to hot-swap it?&lt;/p&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/tomsondev.wordpress.com/5090/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/tomsondev.wordpress.com/5090/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=tomsondev.bestsolution.at&amp;amp;blog=7995503&amp;amp;post=5090&amp;amp;subd=tomsondev&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Mon, 21 Aug 2017 21:12:38 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: EclipseCon Europe: Schedule and Keynotes</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/rKjKKbLJwrM/europe2017</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/rKjKKbLJwrM/europe2017</link>
+	<description>The keynotes are announced, and the schedule is on line for ECE 2017. Register now!&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/rKjKKbLJwrM&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Mon, 21 Aug 2017 15:10:00 +0000</pubDate>
+</item>
+<item>
+	<title>JBoss Tools Team: Integration Tooling for Eclipse Oxygen</title>
+	<guid isPermaLink="true">https://tools.jboss.org/blog/integration-stack-4.5.0.Final.html</guid>
+	<link>https://tools.jboss.org/blog/integration-stack-4.5.0.Final.html</link>
+	<description>&lt;div&gt;&lt;div id=&quot;preamble&quot;&gt;
+      &lt;div class=&quot;sectionbody&quot;&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;&lt;strong&gt;Try our complete Eclipse Oxygen and Red Hat JBoss Developer Studio 11 compatible integration tooling.&lt;/strong&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;imageblock&quot;&gt;
+      &lt;div class=&quot;content&quot;&gt;
+      &lt;img alt=&quot;jbosstools jbdevstudio blog header&quot; src=&quot;https://tools.jboss.org/blog/images/jbosstools-jbdevstudio-blog-header.png&quot; /&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;&lt;strong&gt;JBoss Tools Integration Stack 4.5.0.Final / Developer Studio Integration Stack 11.0.0.GA&lt;/strong&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;admonitionblock note&quot;&gt;
+      &lt;table&gt;
+      &lt;tbody&gt;&lt;tr&gt;
+      &lt;td class=&quot;icon&quot;&gt;
+      &lt;i class=&quot;fa icon-note&quot; title=&quot;Note&quot;&gt;&lt;/i&gt;
+      &lt;/td&gt;
+      &lt;td class=&quot;content&quot;&gt;
+      All of the Integration Stack components have been verified to work with the same dependencies as JBoss Tools 4.5 and Developer Studio 11.
+      &lt;/td&gt;
+      &lt;/tr&gt;
+      &lt;/tbody&gt;&lt;/table&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect1&quot;&gt;
+      &lt;h2 id=&quot;what-s-new-for-this-release&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#what-s-new-for-this-release&quot;&gt;&lt;/a&gt;What’s new for this release?&lt;/h2&gt;
+      &lt;div class=&quot;sectionbody&quot;&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;This is the initial release in support of Eclipse Oxygen.  It syncs up with Developer Studio 11.0.0, JBoss Tools 4.5.0 and Eclipse 4.7.0 (Oxygen.0).  It is also a maintenance release for SwitchYard and BRMS tooling.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;Data Virtualization tooling support is not yet available (scheduled for the autumn).&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;SwitchYard is deprecated in this release.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/fusetools.html&quot;&gt;Fuse Tooling&lt;/a&gt; has moved out of the Integration Stack to be a core part of JBoss Tools and Developer Studio.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect2&quot;&gt;
+      &lt;h3 id=&quot;released-tooling-highlights&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#released-tooling-highlights&quot;&gt;&lt;/a&gt;Released Tooling Highlights&lt;/h3&gt;
+      &lt;div class=&quot;sect3&quot;&gt;
+      &lt;h4 id=&quot;jboss-business-process-and-rules-development&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#jboss-business-process-and-rules-development&quot;&gt;&lt;/a&gt;JBoss Business Process and Rules Development&lt;/h4&gt;
+      &lt;div class=&quot;sect4&quot;&gt;
+      &lt;h5 id=&quot;bpmn2-modeler-known-issues&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#bpmn2-modeler-known-issues&quot;&gt;&lt;/a&gt;BPMN2 Modeler Known Issues&lt;/h5&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;See the &lt;a href=&quot;https://access.redhat.com/documentation/en-us/red_hat_jboss_developer_studio_integration_stack/11.0/html/11.0.0_release_notes_and_known_issues/known_issues#bpmn2_1_4_0_final_2&quot;&gt;BPMN2 1.4.0.Final Known Issues Section&lt;/a&gt; of the Integration Stack 11.0.0.GA release notes.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect4&quot;&gt;
+      &lt;h5 id=&quot;drools-jbpm6-known-issues&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#drools-jbpm6-known-issues&quot;&gt;&lt;/a&gt;Drools/jBPM6 Known Issues&lt;/h5&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;See the &lt;a href=&quot;https://access.redhat.com/documentation/en-us/red_hat_jboss_developer_studio_integration_stack/11.0/html/11.0.0_release_notes_and_known_issues/known_issues#drools_7_0_1_final_2&quot;&gt;Drools 7.0.1.Final Known Issues Section&lt;/a&gt; of the Integration Stack 11.0.0.GA release notes.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect4&quot;&gt;
+      &lt;h5 id=&quot;switchyard-highlights&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#switchyard-highlights&quot;&gt;&lt;/a&gt;SwitchYard Highlights&lt;/h5&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;See the &lt;a href=&quot;https://access.redhat.com/documentation/en-us/red_hat_jboss_developer_studio_integration_stack/11.0/html/11.0.0_release_notes_and_known_issues/known_issues#switchyard_2_4_0_final_2&quot;&gt;SwitchYard 2.4.0.Final Resolved Issues Section&lt;/a&gt; of the Integration Stack 11.0.0.GA release notes.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect3&quot;&gt;
+      &lt;h4 id=&quot;data-virtualization-highlights&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#data-virtualization-highlights&quot;&gt;&lt;/a&gt;Data Virtualization Highlights&lt;/h4&gt;
+      &lt;div class=&quot;sect4&quot;&gt;
+      &lt;h5 id=&quot;teiid-designer&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#teiid-designer&quot;&gt;&lt;/a&gt;Teiid Designer&lt;/h5&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;Not yet available for Oxygen.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect1&quot;&gt;
+      &lt;h2 id=&quot;what-s-an-integration-stack&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#what-s-an-integration-stack&quot;&gt;&lt;/a&gt;What’s an Integration Stack?&lt;/h2&gt;
+      &lt;div class=&quot;sectionbody&quot;&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;Red Hat JBoss Developer Studio Integration Stack is a set of Eclipse-based development tools. It further enhances the IDE functionality provided by JBoss Developer Studio, with plug-ins specifically for use when developing for other Red Hat JBoss products.  It’s where DataVirt Tooling, SOA tooling and BRMS tooling are aggregated.  The following frameworks are supported:&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect2&quot;&gt;
+      &lt;h3 id=&quot;jboss-business-process-and-rules-development-2&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#jboss-business-process-and-rules-development-2&quot;&gt;&lt;/a&gt;JBoss Business Process and Rules Development&lt;/h3&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;JBoss Business Process and Rules Development plug-ins provide design, debug and testing tooling for developing business processes for Red Hat JBoss BRMS and Red Hat JBoss BPM Suite.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;ulist&quot;&gt;
+      &lt;ul&gt;
+      &lt;li&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/bpel.html&quot;&gt;BPEL Designer&lt;/a&gt; - Orchestrating your business processes.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/bpmn2.html&quot;&gt;BPMN2 Modeler&lt;/a&gt; - A graphical modeling tool which allows creation and editing of Business Process Modeling Notation diagrams using graphiti.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/drools.html&quot;&gt;Drools&lt;/a&gt; - A Business Logic integration Platform which provides a unified and integrated platform for Rules, Workflow and Event Processing including KIE.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/jbpm.html&quot;&gt;jBPM6&lt;/a&gt; - A flexible Business Process Management (BPM) suite.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect2&quot;&gt;
+      &lt;h3 id=&quot;jboss-data-virtualization-development&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#jboss-data-virtualization-development&quot;&gt;&lt;/a&gt;JBoss Data Virtualization Development&lt;/h3&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;JBoss Data Virtualization Development plug-ins provide a graphical interface to manage various aspects of Red Hat JBoss Data Virtualization instances, including the ability to design virtual databases and interact with associated governance repositories. Data Virtualization tooling support is not yet available (scheduled for the autumn).&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;ulist&quot;&gt;
+      &lt;ul&gt;
+      &lt;li&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/teiiddesigner.html&quot;&gt;Teiid Designer&lt;/a&gt; - A visual tool that enables rapid, model-driven definition, integration, management and testing of data services without programming using the Teiid runtime framework.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect2&quot;&gt;
+      &lt;h3 id=&quot;jboss-integration-and-soa-development&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#jboss-integration-and-soa-development&quot;&gt;&lt;/a&gt;JBoss Integration and SOA Development&lt;/h3&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;JBoss Integration and SOA Development plug-ins provide tooling for developing, configuring and deploying BRMS and SwitchYard to Red Hat JBoss Fuse and Fuse Fabric containers.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;ulist&quot;&gt;
+      &lt;ul&gt;
+      &lt;li&gt;
+      &lt;p&gt;All of the Business Process and Rules Development plugins plus SwitchYard. Switchyard is deprecated as of this release.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;li&gt;
+      &lt;p&gt;&lt;a href=&quot;https://tools.jboss.org/features/fusetools.html&quot;&gt;Fuse Tooling&lt;/a&gt; has moved out of the Integration Stack to be a core part of JBoss Tools and Developer Studio.&lt;/p&gt;
+      &lt;/li&gt;
+      &lt;/ul&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect2&quot;&gt;
+      &lt;h3 id=&quot;the-jboss-tools-website-features-tab&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#the-jboss-tools-website-features-tab&quot;&gt;&lt;/a&gt;The JBoss Tools website features tab&lt;/h3&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;Don’t miss the &lt;a href=&quot;https://tools.jboss.org/features&quot;&gt;Features tab&lt;/a&gt; for up to date information on your favorite Integration Stack components.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;sect1&quot;&gt;
+      &lt;h2 id=&quot;installation&quot;&gt;&lt;a class=&quot;anchor&quot; href=&quot;http://tools.jboss.org/blog/news.atom#installation&quot;&gt;&lt;/a&gt;Installation&lt;/h2&gt;
+      &lt;div class=&quot;sectionbody&quot;&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;The easiest way to install the Integration Stack components is through the &lt;a href=&quot;https://access.redhat.com/jbossnetwork/restricted/listSoftware.html?downloadType=distributions&amp;amp;product=jbossdeveloperstudio&amp;amp;version=11.0.0&quot;&gt;stand-alone installer&lt;/a&gt;.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;For a complete set of Integration Stack installation instructions, see &lt;a href=&quot;https://access.redhat.com/documentation/en/red-hat-jboss-developer-studio-integration-stack/10.0/paged/installation-guide/&quot;&gt;Integration Stack Installation Instructions&lt;/a&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;&lt;em&gt;Be the first to try it on Oxygen!&lt;/em&gt;&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div class=&quot;paragraph&quot;&gt;
+      &lt;p&gt;Paul Leacu.&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;
+      &lt;/div&gt;&lt;/div&gt;</description>
+	<pubDate>Mon, 21 Aug 2017 14:14:44 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: EclipseCon Europe: Schedule and Keynotes</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/YjpJY-Kt7OE/news</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/YjpJY-Kt7OE/news</link>
+	<description>The keynotes are announced, and the schedule is on line for ECE 2017. Register now!&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/YjpJY-Kt7OE&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Mon, 21 Aug 2017 14:10:00 +0000</pubDate>
+</item>
+<item>
+	<title>EclipseCon Europe 2017: On Language Servers: Interview with Martin Lippert</title>
+	<guid isPermaLink="false">https://www.eclipsecon.org/europe2017/3059 at https://www.eclipsecon.org/europe2017</guid>
+	<link>https://www.eclipsecon.org/europe2017/news/language-servers-interview-martin-lippert</link>
+	<description>&lt;div class=&quot;field field-name-body field-type-text-with-summary field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;p&gt;&lt;em&gt;Martin Lippert's talk, &lt;a href=&quot;https://www.eclipsecon.org/europe2017/session/implementing-language-servers-good-bad-ugly&quot;&gt;Implementing Language Servers - the Good, the Bad, the Ugly&lt;/a&gt; is an early pick. Martin gives us his thoughts on why language servers are important, what the challenges are and what the future might look like for the technology.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lippert&lt;/strong&gt;: One of the most important messages for attendees at EclipseCon with regards to language servers is: if you want to support a language or a framework, a language server IS THE WAY TO GO. The days of hacking your parser, builder, content-assist, and refactoring directly into Eclipse are over.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;div class=&quot;field field-name-field-news-image field-type-image field-label-hidden&quot;&gt;&lt;div class=&quot;field-items&quot;&gt;&lt;div class=&quot;field-item even&quot;&gt;&lt;a href=&quot;https://www.eclipsecon.org/europe2017/news/language-servers-interview-martin-lippert&quot;&gt;&lt;img alt=&quot;&quot; class=&quot;img-responsive block-center&quot; height=&quot;250&quot; src=&quot;https://www.eclipsecon.org/europe2017/sites/default/files/styles/solstice_news_-_default_-_thumbnail/public/news/MLippert.png?itok=TXBLLBbO&quot; width=&quot;250&quot; /&gt;&lt;/a&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;</description>
+	<pubDate>Mon, 21 Aug 2017 09:44:32 +0000</pubDate>
+</item>
+<item>
+	<title>vert.x project: Introducing Vert.x MQTT client</title>
+	<guid isPermaLink="true">http://vertx.io/blog/introducing-vert-x-mqtt-client</guid>
+	<link>http://vertx.io/blog/introducing-vert-x-mqtt-client</link>
+	<description>&lt;article&gt;&lt;p&gt;In this article we will see how to sett up the new Vert.x MQTT client. Actually, I have a &lt;a href=&quot;https://github.com/Sammers21/vertx-mqtt-client-example&quot;&gt;real example&lt;/a&gt; so you can try it quickly.&lt;/p&gt;
+&lt;p&gt;If you are using Maven or Gradle, add the following dependency to the dependencies section of your project descriptor to access the Vert.x MQTT client:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Maven (in your pom.xml):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs xml&quot;&gt;&lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&amp;gt;&lt;/span&gt;io.vertx&lt;span class=&quot;hljs-tag&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;groupId&lt;/span&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&amp;gt;&lt;/span&gt;vertx-mqtt&lt;span class=&quot;hljs-tag&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;artifactId&lt;/span&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;hljs-tag&quot;&gt;&amp;lt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&amp;gt;&lt;/span&gt;3.5.0.Beta1&lt;span class=&quot;hljs-tag&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;version&lt;/span&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;hljs-tag&quot;&gt;&lt;span class=&quot;hljs-title&quot;&gt;dependency&lt;/span&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Gradle (in your build.gradle file):&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs groovy&quot;&gt;dependencies {
+  compile &lt;span class=&quot;hljs-string&quot;&gt;'io.vertx:vertx-mqtt:3.5.0.Beta1'&lt;/span&gt;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now that you’ve set up your project, you can create a simple application which will receive all messages from all broker channels:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.core.AbstractVerticle;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.mqtt.MqttClient;
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; io.vertx.mqtt.MqttClientOptions;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;import&lt;/span&gt; java.io.UnsupportedEncodingException;
+
+&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-class&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;MainVerticle&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;AbstractVerticle&lt;/span&gt; &lt;/span&gt;{
+
+  &lt;span class=&quot;hljs-annotation&quot;&gt;@Override&lt;/span&gt;
+  &lt;span class=&quot;hljs-function&quot;&gt;&lt;span class=&quot;hljs-keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;hljs-keyword&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;hljs-title&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;hljs-params&quot;&gt;()&lt;/span&gt; &lt;/span&gt;{
+     MqttClientOptions options = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; MqttClientOptions();
+      &lt;span class=&quot;hljs-comment&quot;&gt;// specify broker host&lt;/span&gt;
+      options.setHost(&lt;span class=&quot;hljs-string&quot;&gt;&quot;iot.eclipse.org&quot;&lt;/span&gt;);
+      &lt;span class=&quot;hljs-comment&quot;&gt;// specify max size of message in bytes&lt;/span&gt;
+      options.setMaxMessageSize(&lt;span class=&quot;hljs-number&quot;&gt;100&lt;/span&gt;_000_000);
+
+    MqttClient client = MqttClient.create(vertx, options);
+
+    client.publishHandler(s -&amp;gt; {
+      &lt;span class=&quot;hljs-keyword&quot;&gt;try&lt;/span&gt; {
+        String message = &lt;span class=&quot;hljs-keyword&quot;&gt;new&lt;/span&gt; String(s.payload().getBytes(), &lt;span class=&quot;hljs-string&quot;&gt;&quot;UTF-8&quot;&lt;/span&gt;);
+        System.out.println(String.format(&lt;span class=&quot;hljs-string&quot;&gt;&quot;Receive message with content: \&quot;%s\&quot; from topic \&quot;%s\&quot;&quot;&lt;/span&gt;, message, s.topicName()));
+      } &lt;span class=&quot;hljs-keyword&quot;&gt;catch&lt;/span&gt; (UnsupportedEncodingException e) {
+        e.printStackTrace();
+      }
+    });
+
+    client.connect(s -&amp;gt; {
+      &lt;span class=&quot;hljs-comment&quot;&gt;// subscribe to all subtopics&lt;/span&gt;
+      client.subscribe(&lt;span class=&quot;hljs-string&quot;&gt;&quot;#&quot;&lt;/span&gt;, &lt;span class=&quot;hljs-number&quot;&gt;0&lt;/span&gt;);
+    });
+  }
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;strong&gt;publishHandler&lt;/strong&gt; is the handler called each time the broker, located at &lt;code&gt;iot.eclipse.org:1883&lt;/code&gt;, sends a message to you, from the topics you are subscribing for.&lt;/p&gt;
+&lt;p&gt;But only providing a handler is not enough, you should also connect to the broker and subscribe to some topics. For this reason, you should use the &lt;strong&gt;connect&lt;/strong&gt; method and then call &lt;strong&gt;subscribe&lt;/strong&gt; when the connection established. &lt;/p&gt;
+&lt;p&gt;To deploy this verticle from an application you should have in your &lt;strong&gt;main&lt;/strong&gt; method something like that:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;hljs java&quot;&gt;Vertx vertx = Vertx.vertx();
+vertx.deployVerticle(MainVerticle.class.getCanonicalName());&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;When you have completed all steps correctly the result should look like that:&lt;/p&gt;
+&lt;p&gt;&lt;img alt=&quot;&quot; src=&quot;http://i.imgur.com/b4yYQJE.gif&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;As the alternative and recommended way to bootstrap Vert.x applications you can use &lt;a href=&quot;https://github.com/vert-x3/vertx-maven-starter&quot;&gt;vertx-maven-starter&lt;/a&gt; or &lt;a href=&quot;https://github.com/vert-x3/vertx-gradle-starter&quot;&gt;vertx-gradle-starter&lt;/a&gt;. For completing this guide I have used the first one. The final source code available &lt;a href=&quot;https://github.com/Sammers21/vertx-mqtt-client-example&quot;&gt;here&lt;/a&gt;. If you would like to learn more about Vert.x MQTT client API then check out the &lt;a href=&quot;https://github.com/vert-x3/vertx-mqtt-client/blob/initial-work/src/main/asciidoc/java/index.adoc&quot;&gt;full documentation&lt;/a&gt; and &lt;a href=&quot;https://github.com/vert-x3/vertx-examples/tree/3.5.0.beta1/mqtt-examples&quot;&gt;more examples&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;Thank you for reading!&lt;/p&gt;
+&lt;p&gt;Cheers!&lt;/p&gt;
+&lt;/article&gt;</description>
+	<pubDate>Mon, 21 Aug 2017 00:00:00 +0000</pubDate>
+</item>
+<item>
+	<title>Donald Raab: As a matter of Factory — Part 1 (Mutable)</title>
+	<guid isPermaLink="false">https://medium.com/p/75cc2c5d72d9</guid>
+	<link>https://medium.com/@donraab/as-a-matter-of-factory-part-1-mutable-75cc2c5d72d9?source=rss-df39b86e9f04------2</link>
+	<description>&lt;p&gt;I’ve read a few blogs, articles and tweets over the past year about an upcoming feature in Java 9. Some of the articles have been titled “Immutable Collections in Java 9”. There will be new factory methods on the Java collections interfaces (List, Set, Map) that will create &lt;strong&gt;“compact, unmodifiable collection instances”&lt;/strong&gt;. This feature is described in JEP 269 — &lt;a href=&quot;http://openjdk.java.net/jeps/269&quot;&gt;http://openjdk.java.net/jeps/269&lt;/a&gt;. This feature will be a welcome addition for many Java developers, especially in places like unit tests, where creating small collections can be a frequent and potentially cumbersome activity.&lt;/p&gt;&lt;p&gt;But… we are not getting “contractually” immutable collections in Java 9 and JEP 269 does not claim to provide them. If we were getting “contractually” immutable collections in Java 9, I would expect to see new interfaces named ImmutableCollection, ImmutableSet, ImmutableList and ImmutableMap. Those interfaces could then have the “of” factory methods to produce compile time safe immutable collection instances. ImmutableCollection interfaces should not have methods like add/addAll, remove/removeAll on them because these methods are unsafe and can only throw UnsupportedOperationExceptions.&lt;/p&gt;&lt;p&gt;If you are looking for contractually immutable collections for Java, there are a few open source libraries available today that provide them. &lt;a href=&quot;https://www.eclipse.org/collections/&quot;&gt;Eclipse Collections&lt;/a&gt; provides both mutable and immutable collections, and has collection factories for both of them. In part 1 of this blog, I will compare the mutable factory methods available in Eclipse Collections with the new factory methods that will be added in Java 9. In part 2, I will explore the factories available for immutable collections.&lt;/p&gt;&lt;p&gt;There have always been static factory methods on all of the mutable container implementations in Eclipse Collections. These methods are still available, so you can write the following to create mutable Lists, Sets and Maps using Eclipse Collections.&lt;/p&gt;&lt;pre&gt;MutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    FastList.&lt;strong&gt;&lt;em&gt;newListWith&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;MutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    UnifiedSet.&lt;strong&gt;&lt;em&gt;newSetWith&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;MutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    UnifiedMap.&lt;strong&gt;&lt;em&gt;newWithKeysValues&lt;/em&gt;&lt;/strong&gt;(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;For developers new to the library, these methods can be hard to discover because the developer first needs to know the name of the appropriate implementation classes .&lt;/p&gt;&lt;p&gt;When immutable collections were introduced in the library, we had to make a decision how to create them. We wanted a consistent approach for creating both mutable and immutable collections that would follow a consistent convention that would be easy for developers to learn. Our solution was to create &lt;a href=&quot;https://github.com/eclipse/eclipse-collections/blob/master/docs/guide.md#-creating-mutable-collections&quot;&gt;dedicated collection factory classes&lt;/a&gt;. We decided the convention we would use with our factory classes would be to match the container types we had with corresponding types that ended in “s”. So List(s), Set(s), Map(s), etc. We aim for good &lt;a href=&quot;https://medium.com/@donraab/symmetric-sympathy-2c59d4541d60&quot;&gt;symmetry&lt;/a&gt; here so we can meet developer expectations. Here’s the equivalent code to create mutable collection instances using the factory classes.&lt;/p&gt;&lt;pre&gt;MutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;MutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;MutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;);&lt;/pre&gt;&lt;p&gt;If you want to create empty mutable collections, simply use the empty() method.&lt;/p&gt;&lt;pre&gt;MutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;p&gt;If you would like a more succinct option for creating collections, you can use the &lt;a href=&quot;https://www.eclipse.org/collections/javadoc/8.2.0/org/eclipse/collections/impl/factory/Iterables.html&quot;&gt;&lt;strong&gt;Iterables&lt;/strong&gt;&lt;/a&gt; class with static imports. Then you can write the following.&lt;/p&gt;&lt;pre&gt;MutableList&amp;lt;String&amp;gt; list = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;mList&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;MutableSet&amp;lt;String&amp;gt; set = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;mSet&lt;/em&gt;&lt;/strong&gt;(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;MutableMap&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    &lt;strong&gt;&lt;em&gt;mMap&lt;/em&gt;&lt;/strong&gt;(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;The &lt;strong&gt;“m”&lt;/strong&gt; methods are short for &lt;strong&gt;“mutable”&lt;/strong&gt; and there are also &lt;strong&gt;“i”&lt;/strong&gt; methods which are short for &lt;strong&gt;“immutable”&lt;/strong&gt;.&lt;/p&gt;&lt;p&gt;All of the mutable interfaces in Eclipse Collections extend the corresponding mutable interfaces in the JDK. So &lt;a href=&quot;https://www.eclipse.org/collections/javadoc/8.2.0/org/eclipse/collections/api/list/MutableList.html&quot;&gt;MutableList&lt;/a&gt; is a java.util.List, &lt;a href=&quot;https://www.eclipse.org/collections/javadoc/8.2.0/org/eclipse/collections/api/set/MutableSet.html&quot;&gt;MutableSet&lt;/a&gt; is a java.util.Set, etc.&lt;/p&gt;&lt;figure&gt;&lt;img alt=&quot;&quot; src=&quot;https://cdn-images-1.medium.com/max/789/1*053GOPYx3ptu6txdcP93Lw.png&quot; /&gt;Yellow — JDK, Blue — Eclipse Collections&lt;/figure&gt;&lt;p&gt;The mutable factories will return the most specific type (e.g. MutableList), but you can choose to use a more abstract type (e.g. java.util.List).&lt;/p&gt;&lt;pre&gt;List&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;Set&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;Map&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;The factory methods being added in Java 9 will look as follows.&lt;/p&gt;&lt;pre&gt;List&amp;lt;String&amp;gt; list = &lt;br /&gt;    List.of(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;Set&amp;lt;String&amp;gt; set = &lt;br /&gt;    Set.of(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;Map&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Map.of(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;The difference is that the above methods return &lt;strong&gt;unmodifiable&lt;/strong&gt; instances which have mutable interfaces.&lt;/p&gt;&lt;p&gt;If you want to use the java.util.Collection interfaces, and want the instances returned to be unmodifiable like the Java 9 factory methods directly above, you can use asUnmodifiable() method available on all mutable collections in Eclipse Collections.&lt;/p&gt;&lt;pre&gt;List&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;asUnmodifiable&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;Set&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;asUnmodifiable&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;Map&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;).&lt;strong&gt;asUnmodifiable&lt;/strong&gt;();&lt;/pre&gt;&lt;p&gt;If you want them to be synchronized, you can use asSynchronized().&lt;/p&gt;&lt;pre&gt;List&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;asSynchronized&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;Set&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;).&lt;strong&gt;asSynchronized&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;Map&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;).&lt;strong&gt;asSynchronized&lt;/strong&gt;();&lt;/pre&gt;&lt;p&gt;The following shows all of the factories for mutable object collections that are available in Eclipse Collections.&lt;/p&gt;&lt;pre&gt;MutableList&amp;lt;T&amp;gt; list = Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableSet&amp;lt;T&amp;gt; set = Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableSortedSet&amp;lt;T&amp;gt; sortedSet = SortedSets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableMap&amp;lt;K, V&amp;gt; map = Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableSortedMap&amp;lt;K, V&amp;gt; sortedMap = SortedMaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableStack&amp;lt;T&amp;gt; stack = Stacks.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableBag&amp;lt;T&amp;gt; bag = Bags.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableSortedBag&amp;lt;T&amp;gt; sortedBag = SortedBags.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableBiMap&amp;lt;K, V&amp;gt; biMap = BiMaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;MutableListMultimap&amp;lt;K, V&amp;gt; multimap = Multimaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.list.empty();&lt;br /&gt;MutableSetMultimap&amp;lt;K, V&amp;gt; multimap = Multimaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.set.empty();&lt;br /&gt;MutableBagMultimap&amp;lt;K, V&amp;gt; multimap = Multimaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.bag.empty();&lt;/pre&gt;&lt;p&gt;Eclipse Collections also supports containers for all eight of the Java primitive types as well. In order to provide good symmetry with their object counterparts, there are &lt;a href=&quot;https://github.com/eclipse/eclipse-collections/blob/master/docs/guide.md#-creating-primitive-collections&quot;&gt;factory classes for all of the mutable primitive container types&lt;/a&gt; as well.&lt;/p&gt;&lt;pre&gt;MutableIntList list = &lt;br /&gt;    IntLists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableIntSet set = &lt;br /&gt;    IntSets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableIntBag bag = &lt;br /&gt;    IntBags.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableIntStack stack = &lt;br /&gt;    IntStacks.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;pre&gt;// supports all combinations for all 8 primitives&lt;br /&gt;MutableIntIntMap map = &lt;br /&gt;    IntIntMaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();  &lt;br /&gt;MutableIntObjectMap&amp;lt;V&amp;gt; map = &lt;br /&gt;    IntObjectMaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;br /&gt;MutableObjectIntMap&amp;lt;K&amp;gt; map = &lt;br /&gt;    ObjectIntMaps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.empty();&lt;/pre&gt;&lt;p&gt;There are factories for all primitive types for all container types. The mutable primitive containers also have unmodifiable and synchronized versions as well, to provide good symmetry with their object counterparts.&lt;/p&gt;&lt;pre&gt;MutableIntList list = &lt;br /&gt;    IntLists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, 2, 3).&lt;strong&gt;asUnmodifiable&lt;/strong&gt;();&lt;/pre&gt;&lt;pre&gt;MutableIntList list = &lt;br /&gt;    IntLists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.with(1, 2, 3).&lt;strong&gt;asSynchronized&lt;/strong&gt;();&lt;/pre&gt;&lt;p&gt;The collection factories in Eclipse Collections work with all versions of Java all the way back to version 5. If you want to use the collection factories with Java versions prior to Java 8, you will need to use Eclipse Collections 7.x. Eclipse Collections 8.x is only compatible with Java 8+. Both Eclipse Collections 7.x and 8.x work with Java 8.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;With of &lt;/strong&gt;&lt;em&gt;or&lt;/em&gt;&lt;strong&gt; of with&lt;/strong&gt;&lt;/p&gt;&lt;p&gt;All of the examples that I have shown so far that use “&lt;strong&gt;with&lt;/strong&gt;”, can also be written using “&lt;strong&gt;of&lt;/strong&gt;” as well. In a naming battle between “with” and “of”, there were two winners. So you can write the following if you prefer of instead of with. FWIW, the “with” approach is more consistent with Smalltalk style.&lt;/p&gt;&lt;pre&gt;List&amp;lt;String&amp;gt; list = &lt;br /&gt;    Lists.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.of(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;Set&amp;lt;String&amp;gt; set = &lt;br /&gt;    Sets.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.of(&quot;1&quot;, &quot;2&quot;, &quot;3&quot;);&lt;/pre&gt;&lt;pre&gt;Map&amp;lt;Integer, String&amp;gt; map = &lt;br /&gt;    Maps.&lt;strong&gt;&lt;em&gt;mutable&lt;/em&gt;&lt;/strong&gt;.of(1, &quot;1&quot;, 2, &quot;2&quot;, 3, &quot;3&quot;);&lt;/pre&gt;&lt;p&gt;I think this is a good place to stop for now. In part 2 of this blog series, I will give an overview of the immutable factories that are available for Eclipse Collections.&lt;/p&gt;&lt;img height=&quot;1&quot; src=&quot;https://medium.com/_/stat?event=post.clientViewed&amp;amp;referrerSource=full_rss&amp;amp;postId=75cc2c5d72d9&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 18 Aug 2017 20:35:20 +0000</pubDate>
+</item>
+<item>
+	<title>Kichwa Coders: Be a 10X Developer! Write Parameterized Tests</title>
+	<guid isPermaLink="false">http://kichwacoders.com/?p=2010</guid>
+	<link>https://kichwacoders.com/2017/08/18/be-a-10x-developer-write-parameterized-tests/</link>
+	<description>&lt;p&gt;Following on from &lt;a href=&quot;https://kichwacoders.com/2017/06/08/untested-code-is-like-schrodingers-cat-dead-or-alive/&quot; rel=&quot;noopener&quot; target=&quot;_blank&quot;&gt;Yannick’s previous pos&lt;/a&gt;t about the necessity of thorough testing we wanted to look at the subject from an alternative angle. Within the confines of Junit’s Parameterized Test it is possible to test multiple classes simultaneously – thus saving  time and effort – but as with every labour-saving device, the devil is in the detail at the front end of the task – how to create a test we can rely on that will also reduce our ongoing test maintenance burden? Kichwa Coders’ intern Pierre Sachot grapples with this problem in his latest blog detailing how he set about creating a Parameterized Test within the Eclipse January Project. Find out how he got on and let us know what you think in the comments below.&lt;/p&gt;
+&lt;h2&gt;Context:&lt;/h2&gt;
+&lt;p&gt;&lt;span style=&quot;color: #000000;&quot;&gt;I was back on the January Eclipse project, more specifically on JUnit Tests. We needed to test two functions of the Maths.java: arctan2() function and abs() in order to calculate the absolute value of a Dataset. I worked more on the second function, and as those two functions were really similar we decided to create a Parameterized Test class to include the first function too. This is a test that could be applied to both series of code, with only variable changing. It can therefore be used to test a function with a lot of values to find the one which is failing, or in our case, on several class types.&lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;&lt;a class=&quot;anchor&quot; href=&quot;https://github.com/PierreSachot/Internship-Reports/blob/master/Pierre%20Sachot%20-%20week%206.md#tests-before-using-parameterized-tests&quot; id=&quot;user-content-tests-before-using-parameterized-tests&quot;&gt;&lt;/a&gt;Tests before using Parameterized Tests:&lt;/h2&gt;
+&lt;p&gt;&lt;span id=&quot;more-2010&quot;&gt;&lt;/span&gt;Our tests were really similar:&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;@Test
+public void testAbsDoubleInput() {
+  double[] obj = new double[] { 4.2, -2.9, 6.1 };
+  Dataset a = DatasetFactory.createFromObject(obj);
+
+  int size = a.getSize();
+  double[] c = new double[size];
+  for (int i = 0; i &amp;lt; size; i++) {
+    double abs = Math.abs(obj[i]);
+    c[i] = abs;
+  }
+  Dataset expectedResult = DatasetFactory.createFromObject(c);
+
+  Dataset actualResult = Maths.abs(a);
+  TestUtils.assertDatasetEquals(expectedResult, actualResult, true, ABSERRD, ABSERRD);
+}
+
+@Test
+public void testAbsbyteInput() {
+  Dataset a = DatasetFactory.createFromObject(new byte[] { -4, 8, 6 });
+
+  int size = a.getSize();
+  byte[] c = new byte[size];
+  for (int i = 0; i &amp;lt; size; i++) {
+    int abs = Math.abs(a.getByte(i));
+    c[i] = (byte) abs;
+  }
+  Dataset expectedResult = DatasetFactory.createFromObject(c);
+
+  Dataset actualResult = Maths.abs(a);
+  TestUtils.assertDatasetEquals(expectedResult, actualResult, true, ABSERRD, ABSERRD);
+}
+&lt;/pre&gt;
+&lt;p&gt;Here I have shown examples of two of the classes, but we did in fact use it for six. So now we needed to identify what was similar and what was different in all the tests, and what could be changed to make them more similar.&lt;/p&gt;
+&lt;p&gt;Here the actualResult needed to be in the result type we wanted, because that is what we needed to test, but the expected result type could be written which ever way we wanted it:&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;public void testAbsDoubleInput() {
+  double[] obj = new double[] { 4.2, -2.9, 6.1 };
+  Dataset a = DatasetFactory.createFromObject(DoubleDataset.class, obj);
+
+  int size = a.getSize();
+  double[] c = new double[size];
+  for (int i = 0; i &amp;lt; size; i++) {
+    double abs = Math.abs(obj[i]);
+    c[i] = abs;
+  }
+  Dataset expectedResult = DatasetFactory.createFromObject(DoubleDataset.class, c);
+
+  Dataset actualResult = Maths.abs(a);
+  TestUtils.assertDatasetEquals(expectedResult, actualResult, true, ABSERRD, ABSERRD);
+}
+
+@Test
+public void testAbsbyteInput() {
+  double[] obj = new double[] { 4.2, -2.9, 6.1 };
+  Dataset a = DatasetFactory.createFromObject(ByteDataset.class, obj);
+
+  int size = a.getSize();
+  double[] c = new double[size];
+  for (int i = 0; i &amp;lt; size; i++) {
+    double abs = Math.abs(obj[i]);
+    c[i] = abs;
+  }
+  Dataset expectedResult = DatasetFactory.createFromObject(ByteDataset.class, c);
+
+  Dataset actualResult = Maths.abs(a);
+  TestUtils.assertDatasetEquals(expectedResult, actualResult, true, ABSERRD, ABSERRD);
+}
+&lt;/pre&gt;
+&lt;p&gt;Here in the Dataset constructor you can see that we&lt;span style=&quot;color: #000000;&quot;&gt; created &lt;/span&gt;a ByteDataset from a double array. This was possible because Dataset class allows the user to do this. Now it was possible to see that the only thing that would need to be changed in our tests was the class variable in order to create the Dataset.&lt;/p&gt;
+&lt;p&gt;We wrote a variable to take the class type like this:&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;@Test
+public void testAbsbyteInput() {
+  Class&amp;lt;? extends Dataset&amp;gt; class1 = ByteDataset.class;
+  double[] obj = new double[] {4.2, -2.9, 6.10};
+  Dataset input = DatasetFactory.createFromObject(class1, obj);
+  ...
+}
+&lt;/pre&gt;
+&lt;h2&gt;&lt;a class=&quot;anchor&quot; href=&quot;https://github.com/PierreSachot/Internship-Reports/blob/master/Pierre%20Sachot%20-%20week%206.md#tests-using-parameterized-tests&quot; id=&quot;user-content-tests-using-parameterized-tests&quot;&gt;&lt;/a&gt;Tests using Parameterized Tests:&lt;/h2&gt;
+&lt;p&gt;&lt;span style=&quot;color: #000000;&quot;&gt;So once you&lt;/span&gt; can write a parameterize class test you can reduce your code size and simplify your tests:&lt;/p&gt;
+&lt;pre class=&quot;brush: java; title: ; notranslate&quot;&gt;package org.eclipse.january.dataset;
+
+import org.junit.Test;
+import org.eclipse.january.asserts.TestUtils;
+
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameter;
+import org.junit.runners.Parameterized.Parameters;
+import org.junit.runner.RunWith;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+@RunWith(Parameterized.class)
+public class MathsBasicTypeAbsFunctionParameterizeTest {
+
+  @Parameters(name = &quot;{index}: {0}&quot;) //the &quot;(name = &quot;{index}: {0}&quot;)&quot; allows the Junit test to write which test failed with which parameter
+  public static Collection&amp;lt;Object&amp;gt; data() { //called to get the array of variables that need to be change
+    return Arrays.asList(
+      new Object[] {
+        FloatDataset.class,
+        DoubleDataset.class,
+        ByteDataset.class,
+        ShortDataset.class,
+        IntegerDataset.class,
+        LongDataset.class
+      });
+  }
+
+  @Parameter
+  public Class&amp;lt;? extends Dataset&amp;gt; classType; //Parameter which change when the last test is done.
+
+  //parameter specific to our test don't worry about this one
+  private final static double ABSERRD = 1e-8;
+
+  @Test
+  public void test() {
+    Class&amp;lt;? extends Dataset&amp;gt; class1 = classType;
+    double[] obj = new double[] {4.2, -2.9, 6.10};
+    Dataset input = DatasetFactory.createFromObject(class1, obj);
+    Dataset output = DatasetFactory.createFromObject(class1, new double[]{0,0,0});
+
+    int size = input.getSize();
+    double[] c = new double[size];
+    for (int i = 0; i &amp;lt; size; i++) {
+      double abs = Math.abs(obj[i]);
+      c[i] = abs;
+    }
+    Dataset expectedResult = DatasetFactory.createFromObject(class1, c);
+
+    Dataset actualResult = Maths.abs(input, output);
+    TestUtils.assertDatasetEquals(expectedResult, actualResult, true, ABSERRD, ABSERRD);
+  }
+}
+&lt;/pre&gt;
+&lt;p&gt;Here the function data() is the one which will be called to change the data type. Now we had  a parameterized test which would work with every class which extended Dataset.&lt;/p&gt;
+&lt;h2&gt;Conclusion:&lt;/h2&gt;
+&lt;p&gt;Once you know how to reduce your tests code and can identify things which are the same between tests, it becomes possible to code tests efficiently, winning back time and avoiding code duplication.  This is why Parameterized Tests are essential for every true and wannabe 10X Developer.&lt;/p&gt;&lt;br /&gt;  &lt;a href=&quot;http://feeds.wordpress.com/1.0/gocomments/kichwacoders.wordpress.com/2010/&quot; rel=&quot;nofollow&quot;&gt;&lt;img alt=&quot;&quot; border=&quot;0&quot; src=&quot;http://feeds.wordpress.com/1.0/comments/kichwacoders.wordpress.com/2010/&quot; /&gt;&lt;/a&gt; &lt;img alt=&quot;&quot; border=&quot;0&quot; height=&quot;1&quot; src=&quot;https://pixel.wp.com/b.gif?host=kichwacoders.com&amp;amp;blog=68353182&amp;amp;post=2010&amp;amp;subd=kichwacoders&amp;amp;ref=&amp;amp;feed=1&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 18 Aug 2017 18:06:35 +0000</pubDate>
+</item>
+<item>
+	<title>Eclipse Announcements: Launching Eclipse IoT Newsletter</title>
+	<guid isPermaLink="true">http://feedproxy.google.com/~r/eclipse/fnews/~3/Qta9G2MTiW8/cYn4-n</guid>
+	<link>http://feedproxy.google.com/~r/eclipse/fnews/~3/Qta9G2MTiW8/cYn4-n</link>
+	<description>We're lauching a quarterly Eclipse IoT Newsletter. Subscribe to receive the first issue this September.&lt;img alt=&quot;&quot; height=&quot;1&quot; src=&quot;http://feeds.feedburner.com/~r/eclipse/fnews/~4/Qta9G2MTiW8&quot; width=&quot;1&quot; /&gt;</description>
+	<pubDate>Fri, 18 Aug 2017 10:40:00 +0000</pubDate>
+</item>
+<item>
+	<title>Jens von Pilgrim: Two new Eclipse projects: Xpect and Xsemantics</title>
+	<guid isPermaLink="false">tag:blogger.com,1999:blog-4884093826755448868.post-8131930997650771659</guid>
+	<link>http://jevopisdeveloperblog.blogspot.com/2017/08/two-new-eclipse-projects-xpect-and.html</link>
+	<description>Yesterday, two new Eclipse projects had been created:
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.eclipse.org/xpect&quot;&gt;Eclipse Xpect&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.eclipse.org/xsemantics&quot;&gt;Eclipse Xsemantics&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+Both project are around for quite some time and they both are based on &lt;a href=&quot;https://www.eclipse.org/Xtext/&quot;&gt;Eclipse Xtext&lt;/a&gt;, the famous framework to create editors with all state-of-the-art features (parser, linker, validators, content assist, etc.) for your own textual DSLs, simply based on a grammar.
+&lt;p&gt;
+Xpect is &lt;a href=&quot;https://github.com/meysholdt/Xpect&quot;&gt;written by Moritz Eysholdt&lt;/a&gt;, who is also a committer of Xtext. It is a unit- and integration-testing framework to be used for Xtext-based languages. Instead of writing fiddly JUnit tests, you can simply write things like
+&lt;/p&gt;&lt;pre&gt;&lt;code&gt;// XPECT errors --&amp;gt; &quot;cannot divide two strings&quot;
+&quot;hello&quot; / &quot;world&quot;&lt;/code&gt;&lt;/pre&gt;
+assuming your language supports division, strings, and types.
+
+&lt;p&gt;
+And types is the topic of Xsemantics, &lt;a href=&quot;http://xsemantics.sourceforge.net/&quot;&gt;written by Lorenzo Bettini&lt;/a&gt;, author of the book &lt;a href=&quot;http://www.packtpub.com/implementing-domain-specific-languages-with-xtext-and-xtend/book&quot;&gt;&quot;Implementing DSLs with Xtext and Xtend&quot;&lt;/a&gt;. It is a DSL (implemented in Xtext itself) for writing type systems, reduction rules, interpreters and general relation rules for languages implemented in Xtext. So you can write rules like that:
+&lt;/p&gt;&lt;pre&gt;&lt;code&gt;rule subtypeUnion_Left
+ G|- UnionTypeExpression U &amp;lt;: TypeRef S
+from {
+ U.typeRefs.forall[T| G |- T &amp;lt;: S]
+}&lt;/code&gt;&lt;/pre&gt;
+Well, you probably need to know type theory a little bit to see the beauty in that.
+&lt;p&gt;
+Both of these frameworks are heavily used by &lt;a href=&quot;https://www.eclipse.org/n4js/&quot;&gt;Eclipse N4JS&lt;/a&gt;: it contains more than 10.000 Xpect tests (e.g., &lt;a href=&quot;https://github.com/eclipse/n4js/tree/master/tests/org.eclipse.n4js.spec.tests/xpect-tests&quot;&gt;all specification tests&lt;/a&gt;) and a &lt;a href=&quot;https://github.com/eclipse/n4js/blob/master/plugins/org.eclipse.n4js/src/org/eclipse/n4js/typesystem/n4js.xsemantics&quot;&gt;Java 8 like type system&lt;/a&gt; defined in Xsemantics, and this is also why I act as kind of &quot;assisting project lead&quot; to help the original authors to bring these great tools to Eclipse. The authors and the N4JS team at &lt;a href=&quot;http://enfore.com&quot;&gt;enfore&lt;/a&gt; are now working on bringing the code to Eclipse as soon as possible, to simplify the usage of these frameworks for all Xtext users!
+&lt;/p&gt;&lt;p&gt;
+Keep on modelling!
+&lt;/p&gt;&lt;p&gt;
+I &lt;a href=&quot;http://ed-merks.blogspot.de/2010/11/modeling-in-europe.html&quot;&gt;once said&lt;/a&gt; that modelling without graphical editors is like Tour de France without mountains. Well, I have to correct myself: a great test suite and a complicated type system are just as exciting ;-)&lt;/p&gt;</description>
+	<pubDate>Fri, 18 Aug 2017 06:59:55 +0000</pubDate>
+	<author>noreply@blogger.com (Jens v.P.)</author>
+</item>
+<item>
+	<title>Maximilian and Jonas: EclipseCon Europe 2017, Modeling Symposium</title>
+	<guid isPermaLink="false">https://eclipsesource.com/?p=35268</guid>
+	<link>https://eclipsesource.com/blogs/2017/08/17/eclipsecon-europe-2017-modeling-symposium/</link>
+	<description>&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Ed, Philip and I are organizing the Modeling Symposium for the EclipseCon Europe 2017 in Ludwigsburg. It is scheduled for the second day of the conference, i.e., Wednesday, October 25th, 2017. The symposium aims to provide a forum for community members to present a brief overview of their work. We offer 10 minute lightning slots (including questions) to facilitate a broad range of speakers. The primary goal is to introduce interesting, new technological features. This targets mainly modeling projects which are otherwise not represented at the conference.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;If you are interested in giving a talk, please send a short description (a few sentences) to munich@eclipsesource.com. Depending on the number, we might have to select among the submissions. &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Deadline for submisson: Friday, September 8th, 2017&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Please adhere to the following guidelines:&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li style=&quot;font-weight: 400;&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Please provide sufficient context. Talks should start with a concise overview of what the presenter plans to demonstrate, or what a certain framework offers.  Even more important, explain how and why this is relevant.&lt;/span&gt;&lt;/li&gt;
+&lt;li style=&quot;font-weight: 400;&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Do not bore us! Get to the point quickly.  You do not have to use all your allocation. An interesting 3 minute talk will have a bigger impact than a boring 10 minute talk. We encourage you to plan for a 5 minute talk, leaving room for 5 minutes of discussion.&lt;/span&gt;&lt;/li&gt;
+&lt;li style=&quot;font-weight: 400;&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Keep it short and sweet, focus on the most important aspects. A conference offers the major advantage of getting in contact with people who are interested in your work. So consider the talk more as a teaser to prompt follow-up conversations than a forum to demonstrate or discuss technical details in depth.&lt;/span&gt;&lt;/li&gt;
+&lt;li style=&quot;font-weight: 400;&quot;&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;A demo is worth a thousand slides. We prefer to see how your stuff works rather than be told about how it works with illustrative slides.  Please restrict the slides to  summarize your introduction or conclusion.&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Looking forward to your submissions!&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style=&quot;font-weight: 400;&quot;&gt;Jonas&lt;/span&gt;&lt;/p&gt;</description>
+	<pubDate>Thu, 17 Aug 2017 10:35:58 +0000</pubDate>
+</item>
+
+</channel>
+</rss>
