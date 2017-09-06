@@ -1,0 +1,224 @@
+package chapter7;
+
+public class Lab7 {
+
+	public static void main(String[] args) {
+		double[] myDoubles;
+		myDoubles = new double[10];
+		myDoubles = new double[20];
+		
+		double[] mylist = {1,2,3,4,5,6,7,8,9,10};
+		double[] mylist2 = {11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+		
+		mylist2 = mylist;
+		
+		double x = 7, y = 8;
+		y = x;
+		y = 9;
+		
+		
+		System.out.println("The size of myDoubles is " + myDoubles.length);
+		print(myDoubles);
+//		initArray(myDoubles);
+		print(myDoubles);
+	
+
+		
+		
+		double myDoubles2[];
+		myDoubles2 = new double[10];
+		
+		
+		int[] array = new int[2];
+		int array2[] = new int[2];
+		array[0] = 10;
+		array[1] = 20;
+		
+//		swap(array[0], array[1]);
+//		print(array);
+//		swap(array);
+//		print(array);
+		
+
+	}
+	
+	
+//	1. initialize array
+	public static void init(double[] list){
+		for(int i = 0; i < list.length; i++){
+			list[i] = 1;
+		}
+		
+		for(double d: list){
+			d = 1;
+		}
+	}
+//	2. initialize array with random number
+	public static void initRandom(double[] list){
+		for(int i = 0; i < list.length; i++){
+			list[i] = Math.random()*100;
+		}
+		
+		for(double d: list){
+			d = Math.random()*100;
+		}
+	}
+//	3. displaying array
+	public static void display(double[] list){
+		for(int i = 0; i < list.length; i++){
+			System.out.print(list[i] + "  ");
+		}
+		
+		System.out.println("\n");
+	}
+//	4. summing all elements
+	public static double sum(double[] list){
+		double sum = 0;
+		for(int i = 0; i < list.length; i++){
+			sum += list[i];
+		}
+		return sum;
+	}
+//	4.1 average all elements
+	public static double average(double[] list){
+		double sum = 0;
+		for(int i = 0; i < list.length; i++){
+			sum += list[i];
+		}
+		return sum/list.length;
+	}
+	
+//	5. finding the largest element
+	public static double max(double[] list){
+		double max = Double.MIN_VALUE;
+		for(int i = 0; i < list.length; i++){
+			if(list[i]>max){
+				max = list[i];
+			}
+		}
+		return max;
+	}
+//	6. finding the smallest index of the largest element
+	public static int maxFirstIndex(double[] list){
+		double max = list[0];
+		int indexOfMax = 0;
+		for(int i = 0; i < list.length; i++){
+			if(list[i] > max){
+				max = list[i];
+				indexOfMax = i;
+			}
+		}
+		return indexOfMax;
+	}
+//	7. random shuffling
+	public static void shuffle(double[] list){
+		for(int i = (list.length -1); i > 0; i--){
+			int j = (int) Math.random() * (i + 1);
+			double temp = list[i];
+			list[i] = list[j];
+			list[j] = temp;
+		}
+	}
+//	8. shifting elements
+	public static void shifttArray(double[] array){
+		double temp = array[0];
+		for(int i = 1; i < array.length; i++){
+			array[i-1] = array[i];
+		}
+		array[array.length-1] = temp;
+	}
+	
+	public static void print(double[] array){
+		for(int i = 0; i < array.length; i++){
+			System.out.print(array[i] + "  "); 
+		} 
+		
+//		for(double d: array){
+//			System.out.print(d);
+//		}
+		
+		System.out.println("\n");
+	}
+	
+
+	
+//	9. copying array
+	public static void copy(double[] src, int srcPos, double[] dest, 
+			 int destPos, int length){
+//		1st approach
+		for(int i = srcPos; i < length; i++){
+			dest[destPos] = src[i];
+			destPos++;
+		}
+//		2nd approach
+		System.arraycopy(src, srcPos, dest, destPos, length);
+		
+//		3rd approach
+		dest = src.clone();
+	}
+	
+//	9-1. Passing array by reference (copying array)
+	public static double[] copy(double[] src){
+		double[] dest = new double[src.length];
+//		1st approach
+		for(int i = 0; i < src.length; i++){
+			dest[i] = src[i];
+		}
+		return dest;
+		
+////		2nd approach
+//		System.arraycopy(src, 0, dest, 0, src.length);
+//		return dest;
+//		
+////		3rd approach
+//		dest = src.clone();
+//		return dest;
+	}
+	
+	public static void swap(int x, int y){
+		int temp = x;
+		x = y;
+		y = temp;
+	}
+	public static void swap(int[] x){
+		int temp = x[0];
+		x[0] = x[1];
+		x[1] = temp;
+		
+	}
+//	Variable length of argument
+	public static double average(int... list){
+		int sum = 0;
+		
+		for(int i = 0; i < list.length; i++){
+			sum += list[i];
+		}
+		return sum/list.length;
+		
+		
+//		for(int d: list){
+//			sum += d;
+//		}
+//		return sum/list.length;
+	}
+	
+	public static void average(String title, int...list){
+//		
+	}
+	
+	public static void average(float...list){
+//		
+	}
+	
+	public static void average(long...list){
+//		
+	}
+	
+	public static void print(int[] array){
+		for(int i = 0; i < array.length; i++){
+			System.out.print(array[i] + "  ");
+		}
+		System.out.println("\n");
+	}
+
+}

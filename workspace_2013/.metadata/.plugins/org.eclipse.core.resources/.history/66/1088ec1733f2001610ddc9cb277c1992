@@ -1,0 +1,49 @@
+package chapter3;
+
+import java.util.Scanner;
+
+public class Lab3 {
+	static enum Month {January, February, March, April, May, June, July, August, September,
+		October, November, December}; 
+	
+	public static void main(String[] args) {
+		for(int i = 0 ; i < 12; i++){
+			System.out.println("The month is " + getMonth());
+		}	
+		
+		getDaysInMonth();
+	}
+	
+	public static int getDaysInMonth(){
+		int month, year;
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Enter the month from 1 to 11");
+		month = scanner.nextInt();
+		System.out.println("Enter the year for YYYY");
+		year = scanner.nextInt();
+		
+		return 30;
+	}
+	public static Month getMonth(){
+		int number = (int) (Math.random() * 12);
+		Month m = Month.January;
+		if(number==0){return m.January;}
+		else if (number == 1){return m.February;}
+		else if (number == 2){return m.March;}
+		else if (number == 3){return m.April;}
+		else if (number == 4){return m.May;}
+		else if (number == 5){return m.June;}
+		else if (number == 6){return m.July;}
+		else if (number == 7){return m.August;}
+		else if (number == 8){return m.September;}
+		else if (number == 9){return m.October;}
+		else if (number == 10){return m.November;}
+		else {return m.December;}
+	}
+	
+	public static int getMonthNumber(){
+		
+		return (int) (Math.random() * 12) + 1;
+	}
+
+}

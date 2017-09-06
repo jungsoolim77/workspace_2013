@@ -1,0 +1,50 @@
+package chapter6;
+
+public class Lab6_2 {
+
+	public static void main(String[] args) {
+		int x = 5, y = 6;
+		System.out.println(" x = "+ x + " y = " + y);
+		swap(x,y);
+		System.out.println(" x = "+ x + " y = " + y);
+
+	}
+	
+	public static int increment(int x){
+		return ++x;
+	}
+	
+	public static void swap(int x, int y){
+		int temp = x;
+		x = y;
+		y = temp;
+		System.out.println(" x = "+ x + " y = " + y);
+}
+	
+	public static boolean isEven(int x){
+		if(x%2==0)
+			return true;
+		else
+			return false;
+	}
+
+	public static boolean isOdd(int x){
+		if(x%2!=0)
+			return true;
+		
+		return false;
+	}
+	
+//	public static int max(int x, int y){
+//		return x>y? x:y;
+//	}
+	
+
+	
+//	public static int decrement(int x){
+//		return --x;
+//	}
+	
+
+
+}

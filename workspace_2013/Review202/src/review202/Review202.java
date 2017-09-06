@@ -1,0 +1,52 @@
+package review202;
+
+public class Review202 {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+//		catch exception
+//		
+//		try{
+//			myExceptionTest();
+//		}catch(Exception ex){
+//			ex.printStackTrace(System.out);
+//		}
+		
+		try{
+			myExceptionTest();
+			System.out.println(division(3,0));
+			System.out.println(division(3,3));
+//			myExceptionTest();
+		}catch(Exception ex){
+			ex.printStackTrace(System.out);
+//			System.out.println(ex.toString());
+		}finally{
+			System.out.println("We are done with exception!");
+		}
+
+	}
+	
+//	declare exception	
+	public static double division(int x, int y) throws Exception{
+		if (y == 0){
+//			throw an exception
+			throw new ArithmeticException("Divide by zero...");
+		}
+		return x/y;
+	}
+	
+	
+//	declare exception
+	public static void myExceptionTest() throws Exception{
+//		throw an exception
+		throw new MyTestException("This is a test of exception handling");
+		
+	}
+	
+	
+	
+
+
+	
+}
